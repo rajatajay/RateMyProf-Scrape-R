@@ -9,10 +9,10 @@ eCaps <- list(chromeOptions = list(
   args = c('--headless', '--disable-gpu', '--window-size=1280,800')
 ))
 
-rd <- rsDriver(extraCapabilities = eCaps)
+rd <- rsDriver(extraCapabilities = eCaps) #Running headless chrome
 ffd <- rd$client
 ffd$navigate("https://www.ratemyprofessors.com/search/teachers?query=*&sid=73") #Currently entered Babson College, US
-ffd$screenshot(display = TRUE)
+ffd$screenshot(display = TRUE) #Just to check if you've got the right page
 
 Sys.sleep(2)
 
@@ -25,12 +25,12 @@ while (check == 1)
 {
   load_btn <- ffd$findElement(using = "css", value = ".eaZArN")
   #page = read_html(ffd$getPageSource()[[1]])
-  load_btn$clickElement()
+  load_btn$clickElement() #To press show more
   Sys.sleep(10)
 }
+# It will eventually move on after reaching the end of the page
 
-page = read_html(ffd$getPageSource()[[1]])
-pagecopy <- page
+page = read_html(ffd$getPageSource()[[1]]) # Reads the entire page 
 
 name = page %>% html_nodes(".cJdVEK") %>% html_text()
 quality = page %>% html_nodes(".CardNumRating__CardNumRatingNumber-sc-17t4b9u-2") %>% html_text()
@@ -48,6 +48,7 @@ profess = data.frame(name, quality, difficulty, noRate, wouldtakeagain, course, 
 
 write.csv(profess, "BabsonCollege.csv") #change uni name each time
 
+#After this step there is collecting individual details of every professors review
 
 Sys.sleep(20)
 
@@ -62,7 +63,7 @@ for (i in 1:nrow(profile)) {
 
   NumRate <- 0
   NumRate <- ((strtoi(strsplit(profess[i,4], " ")[[1]][1])) %/% 10)
-  NumRate <- NumRate+10 #number of iterations
+  NumRate <- NumRate+10 #number of iterations +10 just to keep it safe
 
   for (a in 1:NumRate)
   {
@@ -91,7 +92,7 @@ for (i in 1:nrow(profile)) {
   x = 1
   while (x < nrow(courseDate)) {
     if ((courseDate[x,1] == courseDate[x+1,1])){
-      courseDate[x,1] = "remove"
+      courseDate[x,1] = "remove" #Sometimes coursedate repeats twice. I haven't learned HTML/CSS enough to figure out how to fix so I just rid of the adjacent duplicates
       #print(courseDate[x+1,])
       x <-  x+2
     }
@@ -108,9 +109,9 @@ for (i in 1:nrow(profile)) {
 
   DescriptionName <- paste("Description ", ProfnameSearch,".csv",sep = "")
 
-  write.csv(description_indv, paste('C:\\Users\\Rajat\\Desktop\\Runny\\R\\Babson\\Descriptions\\', DescriptionName, sep = ""), row.names = FALSE)
+  write.csv(description_indv, paste('C:\\Users\\Rajat\\Desktop\\Runny\\R\\Babson\\Descriptions\\', DescriptionName, sep = ""), row.names = FALSE) #Enter your destination where all description for each professor needs to be
 
-  write.csv(professInfo, paste('C:\\Users\\Rajat\\Desktop\\Runny\\R\\Babson\\',CSVname, sep = ""), row.names = FALSE)
+  write.csv(professInfo, paste('C:\\Users\\Rajat\\Desktop\\Runny\\R\\Babson\\',CSVname, sep = ""), row.names = FALSE) #Enter your destination where the individual professor's review needs to be stored
 
 
 }

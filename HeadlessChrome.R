@@ -8,10 +8,10 @@ rD <- rsDriver(extraCapabilities = eCaps,
                chromever = "latest_compatible")
 ffd <- rD$client
 
-namelink <- read.csv("namelinkyorku2.csv")
+namelink <- read.csv("namelink.csv")
 profile <- data.frame(namelink[,2])
 
-for (i in 3570:nrow(namelink)) { #plus 40 of YorkUKeele File Run
+for (i in 1:nrow(namelink)) { 
   
   print(i)
   ffd$navigate(paste('',namelink[i,2],'',sep = ""))
