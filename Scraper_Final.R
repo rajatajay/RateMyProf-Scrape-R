@@ -40,9 +40,8 @@ wouldtakeagain = page %>% html_nodes(".fyKbws:nth-child(1) .hroXqf") %>% html_te
 course = page %>% html_nodes(".haUIRO") %>% html_text()
 campus = page %>% html_nodes(".iDlVGM") %>% html_text()
 
-##################################################################################
 namelink <- page %>% html_nodes(".dLJIlx") %>% html_attr("href") %>% paste("https://www.ratemyprofessors.com", ., sep = "") 
-##################################################################################
+
 
 profess = data.frame(name, quality, difficulty, noRate, wouldtakeagain, course, campus,namelink, stringsAsFactors =  FALSE)
 
