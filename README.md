@@ -70,7 +70,7 @@ write.csv(profess, "BabsonCollege.csv") #change uni name each time
 
 ### Output 2 Code
 
-> ```
+```
 profile <- data.frame(namelink, name)
 
 for (i in 1:nrow(profile)) {
