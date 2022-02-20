@@ -16,15 +16,15 @@ ffd$screenshot(display = TRUE) #Just to check if you've got the right page
 
 Sys.sleep(2)
 
-load_btn <- ffd$findElement(using = "css", value = ".ecgEHi") #To get rid of the pop-up
-load_btn$clickElement()
+load_btn <- ffd$findElement(using = "css", value = ".gvGrz") #To get rid of the pop-up # ".ecgEHi" previous pop up
+load_btn$clickElement() 
 
 check <- 1
 
 while (check == 1)
 {
-  load_btn <- ffd$findElement(using = "css", value = ".eaZArN")
-  #page = read_html(ffd$getPageSource()[[1]])
+  load_btn <- ffd$findElement(using = "css", value = ".gjQZal")
+  #page = read_html(ffd$getPageSource()[[1]]) # ".eaZArN"
   load_btn$clickElement() #To press show more
   Sys.sleep(10)
 }
@@ -45,7 +45,7 @@ namelink <- page %>% html_nodes(".dLJIlx") %>% html_attr("href") %>% paste("http
 
 profess = data.frame(name, quality, difficulty, noRate, wouldtakeagain, course, campus,namelink, stringsAsFactors =  FALSE)
 
-write.csv(profess, "BabsonCollege.csv") #change uni name each time
+write.csv(profess, "BabsonCollege2.csv") #change uni name each time
 
 #After this step there is collecting individual details of every professors review
 
