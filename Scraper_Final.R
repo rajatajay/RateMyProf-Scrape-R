@@ -32,36 +32,44 @@ while (check == 1)
 
 page = read_html(ffd$getPageSource()[[1]]) # Reads the entire page 
 
-name = page %>% html_nodes(".cJdVEK") %>% html_text()
+init_name <-  page %>% html_nodes(".cJdVEK") %>% html_text()
 quality = page %>% html_nodes(".CardNumRating__CardNumRatingNumber-sc-17t4b9u-2") %>% html_text()
 difficulty = page %>% html_nodes(".enhFnm+ .fyKbws .hroXqf") %>% html_text()
-noRate = page %>% html_nodes(".jMRwbg") %>% html_text()
-wouldtakeagain = page %>% html_nodes(".fyKbws:nth-child(1) .hroXqf") %>% html_text()
+
+init_num_rate <-  page %>% html_nodes(".jMRwbg") %>% html_text()
+
+init_wouldtakeagain <- page %>% html_nodes(".fyKbws:nth-child(1) .hroXqf") %>% html_text()
+
 course = page %>% html_nodes(".haUIRO") %>% html_text()
 campus = page %>% html_nodes(".iDlVGM") %>% html_text()
 
 namelink <- page %>% html_nodes(".dLJIlx") %>% html_attr("href") %>% paste("https://www.ratemyprofessors.com", ., sep = "") 
 
 
-profess = data.frame(name, quality, difficulty, noRate, wouldtakeagain, course, campus,namelink, stringsAsFactors =  FALSE)
+init_profess <- data.frame(init_name, quality, difficulty, init_num_rate, init_wouldtakeagain, course, campus,namelink, stringsAsFactors =  FALSE)
 
-write.csv(profess, "BabsonCollege2.csv") #change uni name each time
+init_profess <- init_profess %>% separate(init_name, c("first_name", "last_name"), " ")
+init_profess <- init_profess %>% separate(init_num_rate, c("num_rate"), " ")
+init_profess <- init_profess %>% separate(init_wouldtakeagain, c("would_take_again"), "%")
+
+profess <- data.frame(init_profess, stringsAsFactors =  FALSE)
+
+write.csv(profess, "BabsonCollegeNew.csv") #change uni name each time
 
 #After this step there is collecting individual details of every professors review
 
+
 Sys.sleep(20)
 
-profile <- data.frame(namelink, name)
+for (i in 1:nrow(profess)) {
 
-for (i in 1:nrow(profile)) {
-
-  ffd$navigate(paste('',profile[i,1],'',sep = ""))
+  ffd$navigate(paste('',profess[i,9],'',sep = ""))
 
   suppressMessages(try(load_btn <- ffd$findElement(using = "css", value = ".ecgEHi"), silent = TRUE)) #To get rid of the pop-up
   suppressMessages(try(load_btn$clickElement(), silent = TRUE))
 
   NumRate <- 0
-  NumRate <- ((strtoi(strsplit(profess[i,4], " ")[[1]][1])) %/% 10)
+  NumRate <- ((strtoi(strsplit(profess[i,5], " ")[[1]][1])) %/% 10)
   NumRate <- NumRate+10 #number of iterations +10 just to keep it safe
 
   for (a in 1:NumRate)
@@ -100,17 +108,30 @@ for (i in 1:nrow(profile)) {
     }
   }
   freshcoursedate <- courseDate[courseDate$course != "remove",]
+  
+  freshcoursedate <- freshcoursedate %>% separate(date_indv, c("month", "day", "year"), " ")
+  freshcoursedate <- freshcoursedate %>% separate(day, c("day"), "th,|st,|nd,|rd,")
+  freshcoursedate <- freshcoursedate %>% separate(course_indv, c("course_name", "course_code"), "(?=[A-Za-z])(?<=[0-9])|(?=[0-9])(?<=[A-Za-z])")
+  freshcoursedate$course_name <- substr(freshcoursedate$course_name,1,4)
+  freshcoursedate$course_code <- substr(freshcoursedate$course_code,1,4)
+  
+  prof_name <- data.frame(profess[,1], profess[,2])
+  colnames(prof_name) <- c("first_name", "last_name")
+  
+  professInfo = data.frame(prof_name[i,1], prof_name[i,2], freshcoursedate, quality_indv, difficulty_indv, stringsAsFactors =  FALSE, check.rows = TRUE)
 
-  professInfo = data.frame(freshcoursedate, quality_indv, difficulty_indv, stringsAsFactors =  FALSE, check.rows = TRUE)
-
-  ProfnameSearch <- paste(profess[i,1], "at", profess[i,7],"RateMyProfessor", sep = " ")
+  ProfnameSearch <- paste(profess[i,1], profile[i,2], "at", profess[i,8],"RateMyProfessor", sep = " ")
   CSVname <- paste(ProfnameSearch,".csv",sep = "")
 
   DescriptionName <- paste("Description ", ProfnameSearch,".csv",sep = "")
 
-  write.csv(description_indv, paste('C:\\Users\\Rajat\\Desktop\\Runny\\R\\Babson\\Descriptions\\', DescriptionName, sep = ""), row.names = FALSE) #Enter your destination where all description for each professor needs to be
+  write.csv(description_indv, paste('C:\\Users\\Rajat\\Desktop\\Runny\\R\\Babson\\Descriptions\\', DescriptionName, sep = ""), row.names = FALSE) 
 
-  write.csv(professInfo, paste('C:\\Users\\Rajat\\Desktop\\Runny\\R\\Babson\\',CSVname, sep = ""), row.names = FALSE) #Enter your destination where the individual professor's review needs to be stored
+#Enter your destination where all description for each professor needs to be
+
+  write.csv(professInfo, paste('C:\\Users\\Rajat\\Desktop\\Runny\\R\\Babson\\',CSVname, sep = ""), row.names = FALSE) 
+  
+#Enter your destination where the individual professor's review needs to be stored
 
 
 }
