@@ -20,10 +20,19 @@ All the reviews of individual professors. I separately appended all of them in a
 
 ![](https://i.imgur.com/Rb74POt.png)
 
-**Columns 'course_indv', 'date_indv', 'quality_indv', 'difficulty_indv' are the only ones from the R Script. All other columns were created through Pandas. I will make futher changes to specifically create the other columns in R**
+
+## Update March 5th 2022
+
+Cleaned all the possible data all sorted in alphabetic order
+
+![](https://imgur.com/a/vsIbTt5)
+
+After processing the data, I was able to vislualize into Tableau time-series scatter plot of average difficulty and quality scores by catergorizing into [1000 Level](https://public.tableau.com/app/profile/rajat.ajay/viz/1000LevelCourses/Dashboard1), [2000 Level](https://public.tableau.com/app/profile/rajat.ajay/viz/2000LevelCourses/Dashboard1), [3000 Level](https://public.tableau.com/app/profile/rajat.ajay/viz/3000LevelCourses/Dashboard1), and [4000 Level](https://public.tableau.com/app/profile/rajat.ajay/viz/4000LevelCourses/Dashboard1) Courses. Moreover interesting insights on [Monthly Reviews of ECON Courses](https://public.tableau.com/app/profile/rajat.ajay/viz/MonthlyECONLevelCourses/Dashboard1) were provided as well.
+
+More data-processing is required for course codes and course names as some values were switched. Once the minor changes are made, the file should be ready for more Tableau Data Visualization.
+
 
 ### Additional Changes and/or notes
 
 * Scraping time usually depends on the PC, I've averaged at 180 minutes
-* Added more data wrangling and data-scraping to make it look prettier
-* This is not the final build, however, I will make changes in the coming days
+
